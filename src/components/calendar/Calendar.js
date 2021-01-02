@@ -8,18 +8,13 @@ import { Modal } from "@daypilot/modal";
 import * as firebase from "firebase";
 
 
-
-
-
 // TODO
 
 // Firebase event
 // where calendar on client??? calendrier -
 //                                      lundi mardi mercredi jeudi vendredi samedi dimanche
 //                                            - event: horaire  YYYY-MM-DD[T]HH:MM:SS event <id,text,start,end,backColor> where text=radioid
-//                                                    
-//
-//
+
 
 const styles = {
   left: {
@@ -45,7 +40,6 @@ class Calendar extends Component {
   isPlaying = false;
 
 
-
   async snapshotToArray(snapshot) {
     var returnArr = [];
     const arraySnapChild = []
@@ -61,15 +55,6 @@ class Calendar extends Component {
       returnArr.push(item);
     }
     return returnArr;
-    /* snapshot.forEach(function (childSnapshot) {
-       console.log("in for each")
-       var item = childSnapshot.val();
-       item.key = childSnapshot.key;
- 
-       returnArr.push(item);
-     });
- 
-     return  returnArr;*/
 
   }
 
@@ -96,7 +81,6 @@ class Calendar extends Component {
       isLoaded: false,
       olditems: null,
       clientRadio: null,
-      ///calendar
       selectValue: "test",
       viewType: "Week",
       durationBarVisible: false,
@@ -136,14 +120,7 @@ class Calendar extends Component {
 
       eventDeleteHandling: "Update",
       onEventClick: args => {
-
-
         let dp = this.calendar;
-
-
-
-        console.log("argsClickEvent", args.e.data);
-
         //les whatIneed recuperer on les même id que les event
 
 
@@ -156,11 +133,6 @@ class Calendar extends Component {
           resources.push({ name: this.state.items[cpt].station.name, id: this.state.items[cpt].station.id })
           cpt++;
         }
-
-        /*    {          { name: "Resource A", id: "A" },
-              { name: "Resource B", id: "B" },
-              { name: "Resource C", id: "C" },
-            ];*/
 
         var form = [
 
@@ -228,24 +200,7 @@ class Calendar extends Component {
 
             })
           console.log("end update firebase")
-
-
-          //child().update()...
-
-          /*that.state.events = that.state.events.filter(function (element) {
-            return element.id !== eventUpdate.id;
-          });*/
-          //that.state.events.push(eventUpdate);
-          /*that.calendar.events.list = [
-            that.state.events
-          ];
-          that.calendar.update()*/
-          // console.log('refresh', that.calendar, that.calendar.update({ event: that.state.events }))
-          console.log('datares', args2.result);
         })
-
-
-
       },
     };
 
@@ -280,14 +235,6 @@ class Calendar extends Component {
         //LA format année jour mois "AAAA-MM-JJT20:40:00"
         for (let elmt in dayData) {
           console.log("yoo", dayData[elmt], dayData[elmt].end, typeof (dayData[elmt].end), dayData[elmt].end.toString())
-          let actualDay = 'ok';
-
-          var currentDate = moment();
-
-          var weekStart = currentDate.clone().startOf('isoweek');
-          // moment(weekStart).add(i, 'days').format("YYYY-MM-DD HH:mm")
-          // chercher index du jour actuel
-
 
           let weekday = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi']
 
