@@ -3,6 +3,7 @@ import React from 'react';
 class CallerAPI extends React.Component {
   constructor(props) {
     super(props);
+    console.log("callerapi props", this.props)
     this.state = {
       error: null,
       isLoaded: false,
@@ -65,7 +66,7 @@ class CallerAPI extends React.Component {
 
 
   componentWillMount() {
-    console.log(" apicaller did mount");
+    console.log(" apicaller will mount");
 
 
     // `messages/${uid}`
