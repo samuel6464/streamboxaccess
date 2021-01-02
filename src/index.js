@@ -2,7 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import ResizeObserver from "resize-observer-polyfill"
 
+window.ResizeObserver = ResizeObserver; // set the observer globally before importing app
 ReactDOM.render(
   <React.StrictMode>
     <App />
