@@ -1,82 +1,11 @@
 import React, { Component, useState } from 'react';
-import ReactDOM from 'react-dom';
-import logo from './logo.svg';
+
 import './App.css';
 import CallerAPI from './CallerAPI';
 import * as firebase from "firebase";
 import config from './config';
-import DatetimepickerRange from './components/DatetimepickerRange';
-import moment from 'moment'
 import Calendar from "./components/calendar/Calendar"
 import 'resize-observer-polyfill/dist/ResizeObserver.global';
-import { TimeGridScheduler, classes } from '@remotelock/react-week-scheduler';
-import '@remotelock/react-week-scheduler/index.css';
-
-const rangeStrings = [
-  ['2019-03-04 00:15', '2019-03-04 01:45'],
-  ['2019-03-05 09:00', '2019-03-05 10:30'],
-  ['2019-03-06 22:00', '2019-03-06 22:30'],
-  ['2019-03-07 01:30', '2019-03-07 03:00'],
-  ['2019-03-07 05:30', '2019-03-07 10:00'],
-  ['2019-03-08 12:30', '2019-03-08 01:30'],
-  ['2019-03-09 22:00', '2019-03-09 23:59'],
-];
-
-function handleClick() { alert("handleclick coucou") }
-
-
-function Week() {
-  var currentDate = moment();
-
-  var weekStart = currentDate.clone().startOf('isoweek');
-
-  var days = [];
-
-
-  for (var i = 0; i <= 6; i++) {
-    let dayRange = [];
-    dayRange.push(moment(weekStart).add(i, 'days').format("YYYY-MM-DD HH:mm"))
-    dayRange.push(moment(weekStart).add(i + 1, 'days').format("YYYY-MM-DD HH:mm"))
-    days.push(dayRange)
-
-  }
-
-
-  console.log('ici', days);
-
-  const defaultSchedule = days.map(day =>
-    day.map(dateString => new Date(dateString)),
-  );
-
-  console.log("là)", defaultSchedule);
-  const [schedule, setSchedule] = useState(defaultSchedule);
-
-  return (
-    <div>
-      <div
-        className="root"
-        style={{
-          width: "80vw",
-          height: "600px",
-          "--cell-height": "20px",
-          "--cell-width": "50px"
-        }}
-      >
-
-
-      </div>
-      <button onClick={() => {
-        console.log('là ', { schedule })
-      }}>
-        Update Calendar
-        </button>
-    </div>
-
-  );
-}
-
-
-
 
 class App extends Component {
 
@@ -133,7 +62,6 @@ class App extends Component {
         if (clientsTab[i] === refthis.state.username) {
 
 
-          var key = childSnapshot.key;
           var data = childSnapshot.val();
           refthis.value = data;
           refthis.setState({ value: refthis.value });
@@ -210,7 +138,7 @@ class App extends Component {
   render() {
     //                 <!--<Week></Week>-->
 
-    const { messages, loading, usernamesend } = this.state;
+    const { loading, usernamesend } = this.state;
     if (usernamesend == null) {
       return (<form onSubmit={this.handleSubmit}>
         <label>

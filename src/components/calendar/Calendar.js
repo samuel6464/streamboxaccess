@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import { DayPilot, DayPilotCalendar, DayPilotNavigator } from "daypilot-pro-react";
 import "./CalendarStyles.css";
 import moment from 'moment';
-import $ from 'jquery';
-import { Modal } from "@daypilot/modal";
-
+//import * as Modal from './daypilot-modal.min.js';
 import * as firebase from "firebase";
+//import { Modal } from "./daypilot-modal.min.js";
+//import { Modal } from "@daypilot/modal";
+import { Modal } from "./daypilot-modal.js";
+
+//var Modal = require("./daypilot-modal.min.js");
+
 
 
 // TODO
@@ -150,6 +154,8 @@ class Calendar extends Component {
         };
 
         let that = this;
+        var modal = new DayPilot.Modal();
+
 
         Modal.form(form, data).then(function (args2) {
           //tOdO Quand on quitte la modal on mets a jour les state.event dispo.......?
@@ -365,54 +371,30 @@ class Calendar extends Component {
       startDate: dateBegin,
       //ok
       events: [
-        /* {
-           id: 1,
-           text: "Event 1",
-           start: dateBegin + "T10:30:00",
-           end: dateBegin + "T13:00:00",
-           idRadio: 1
-         },
-         {
-           id: 2,
-           text: "Event 2",
-           start: dateBegin + "T17:00:00",
-           end: dateBegin + "T18:00:00",
-           backColor: "#38761d",
-           idRadio: 1
-         }*/
+
       ]
     });
 
     this.calendar.onEventDeleted = function (evt) {
-      console.log("isla", evt)
 
-      let event4FB = { 'end': evt.e.data.end, 'id': evt.e.data.id, 'idRadio': evt.e.data.idRadio, 'start': evt.e.data.start, 'text': evt.e.data.text }
-      //database.child(event4FB).remove();
 
       let weekday = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi']
       that.userRef = that.usersref.child(that.props.users.username)
       //weekend calendar
       that.weekcalendarref = that.userRef.child(
         'weekcalendar')
-      console.log("tsest ok rremove", evt)
       // remove via ref in firebase todo
       for (let day of weekday) {
         that.weekcalendarref.child(
           day).child('événements').once('value', (snapshot) => {
-            console.log('snapshot', snapshot, snapshot.key, snapshot.val())
 
             //MAUVAISE LOgiqUE oN veut regardé dans les evenements courant du calendrier
 
             //pour chaque evenement du jour je regarde dans l'ensemble des evenement
             snapshot.forEach((eventFB) => {
-              console.log(eventFB, eventFB.val().id);
-
-              var e = that.calendar.events.find(eventFB.val().id);
-              console.log("heltest", eventFB.val().id, evt.e.data.id,)
-              if (eventFB.val().id == evt.e.data.id) {
+              if (eventFB.val().id === evt.e.data.id) {
                 console.log('refupdater', eventFB.ref, eventFB, 'datafrom', evt.e.data);
 
-                let event4FB = { 'end': evt.e.data.end, 'id': evt.e.data.id, 'idRadio': evt.e.data.idRadio, 'start': evt.e.data.start, 'text': evt.e.data.text }
 
                 //WTF NOT WORKING ???? NOW THAT WE CHANGE THING
                 eventFB.ref.remove()
@@ -531,7 +513,7 @@ class Calendar extends Component {
 
     // TODO essayer de recuperer les noeud fils...
 
-
+    // aLL TO BE ENDED 
     let datalundi = await this.getEventDataDay(lundi)
     let datamardi = await this.getEventDataDay(mardi)
     let datamercredi = await this.getEventDataDay(mercredi)
@@ -540,16 +522,7 @@ class Calendar extends Component {
     let datasamedi = await this.getEventDataDay(samedi)
     let datadimanche = await this.getEventDataDay(dimanche)
 
-    // retrier les event
 
-    //TODO reorganisation de dp.events
-    /* console.log("helllllo,", this.calendar.events, this.calendar.events['list'])
-     let temp = new Array(this.calendar.events.list.length);
-     for (let i = 0; i < this.calendar.events.list.length; i++) {
-       temp[this.calendar.events.list[i].id] = this.calendar.events.list[i];
-     }
-     this.calendar.events.list = temp;*/
-    console.log("helllllo,", this.calendar.events, this.calendar.events['list'])
 
     let d = new Date(new DayPilot.Date().getTime());
     console.log("date is", d, d.getTime())
@@ -571,7 +544,6 @@ class Calendar extends Component {
       console.log('event', obj, obj.end, obj.start, obj.end.value, end, start, now)
 
       if (now < end && now > start) {
-        console.log('items', this.state, this.state.items)
         //ICITODO
         return new Promise((resolve, reject) => {
           fetch(`http://207.154.224.184/api/nowplaying/${obj.idRadio}`)
