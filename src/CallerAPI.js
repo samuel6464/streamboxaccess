@@ -38,7 +38,7 @@ class CallerAPI extends React.Component {
   fetchOneRadio(radioNum) {
     console.log("heyfetchoneRadio", this.props)
     return new Promise((resolve, reject) => {
-      fetch(`http://207.154.224.184/api/nowplaying/${radioNum}`)
+      fetch(`http://104.131.59.27/api/nowplaying/${radioNum}`)
 
         .then(res => res.json(), res => console.log(res))
         .then(
@@ -113,10 +113,7 @@ class CallerAPI extends React.Component {
   componentDidUpdate() {
     console.log("didi update  apicaller");
     this.multifetch();
-    /*this.url = "http://207.154.224.184/radio/8010/radio.mp3?1602030193";
-    this.audio = new Audio(this.url);
-   
-    this.audio.play();*/
+
 
 
   }

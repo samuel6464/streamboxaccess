@@ -333,10 +333,7 @@ class Calendar extends Component {
 
   componentDidUpdate() {
 
-    /*this.url = "http://207.154.224.184/radio/8010/radio.mp3?1602030193";
-    this.audio = new Audio(this.url);
-   
-    this.audio.play();*/
+
 
 
   }
@@ -422,7 +419,7 @@ class Calendar extends Component {
   fetchOneRadioBeta(radioNum) {
     console.log("heyfetchoneRadio", this.props)
     return new Promise((resolve, reject) => {
-      fetch(`http://207.154.224.184/api/nowplaying/${radioNum}`)
+      fetch(`http://104.131.59.27/api/nowplaying/${radioNum}`)
       this.audio = new Audio(this.url);
 
 
@@ -436,7 +433,7 @@ class Calendar extends Component {
   fetchOneRadio(radioNum) {
     console.log("heyfetchoneRadio", this.props)
     return new Promise((resolve, reject) => {
-      fetch(`http://207.154.224.184/api/nowplaying/${radioNum}`)
+      fetch(`http://104.131.59.27/api/nowplaying/${radioNum}`)
 
         .then(res => res.json(), res => console.log(res))
         .then(
@@ -546,7 +543,7 @@ class Calendar extends Component {
       if (now < end && now > start) {
         //ICITODO
         return new Promise((resolve, reject) => {
-          fetch(`http://207.154.224.184/api/nowplaying/${obj.idRadio}`)
+          fetch(`http://104.131.59.27/api/nowplaying/${obj.idRadio}`)
 
             .then(res => res.json(), res => console.log(res))
             .then(
