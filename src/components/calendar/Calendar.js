@@ -92,17 +92,44 @@ class Calendar extends Component {
       onTimeRangeSelected: args => {
         let that = this;
         let dp = this.calendar;
+        var resources = [];
 
+        let cpt = 0;
 
-        DayPilot.Modal.prompt("Create a new event:", "Event 1").then(function (modal) {
-          dp.clearSelection();
-          if (!modal.result) { return; }
+        for (let elmt in this.state.items) {
+          console.log("coucou2", this.state.items[cpt])
+          resources.push({ name: this.state.items[cpt].station.name, id: this.state.items[cpt].station.id })
+          cpt++;
+        }
+
+        var form = [
+          {
+            name: "Resource", id: "resource", options:
+              resources
+          },
+        ];
+        //ICIlA
+        var data = {
+          resource: 1
+        };
+
+        Modal.form(form, data).then(function (args2) {
+          console.log('arg:', args, 'arg2', args2, that.state.items);
+          // find pos of racio id
+          let pos = 0
+          for (let item of that.state.items) {
+            if (item.station.id == args2.result.resource) {
+              break;
+            } else {
+              pos++;
+            }
+          }
           dp.events.add(new DayPilot.Event({
             start: args.start,
             end: args.end,
             id: that.state.events.length + 1,
-            text: modal.result,
-            idRadio: 1
+            text: that.state.items[pos].station.name,
+            idRadio: args2.result.resource
           }));
           // add to FB
 
@@ -110,14 +137,39 @@ class Calendar extends Component {
 
           let refEventDay = that.weekcalendarref.child(
             weekday).child('événements')
-          let name = modal.result;
-          let event4FB = { 'end': args.end.value, 'id': that.state.events.length + 1, 'idRadio': args.idRadio, 'start': args.start.value, 'text': modal.result, idRadio: 1 }
+          let name = that.state.items[pos].station.name;
+          let event4FB = { 'end': args.end.value, 'id': that.state.events.length + 1, 'idRadio': args2.result.resource, 'start': args.start.value, 'text': that.state.items[pos].station.name }
           let jsonvariable = {};
           jsonvariable[name] = event4FB
           console.log("jsonvariable", jsonvariable, args)
           refEventDay.update(jsonvariable)
 
         });
+
+        /*  DayPilot.Modal.prompt("Create a new event:", "Event 1").then(function (modal) {
+            dp.clearSelection();
+            if (!modal.result) { return; }
+            dp.events.add(new DayPilot.Event({
+              start: args.start,
+              end: args.end,
+              id: that.state.events.length + 1,
+              text: modal.result,
+              idRadio: 1
+            }));
+            // add to FB
+   
+            let weekday = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'][new Date(args.start).getDay()]
+   
+            let refEventDay = that.weekcalendarref.child(
+              weekday).child('événements')
+            let name = modal.result;
+            let event4FB = { 'end': args.end.value, 'id': that.state.events.length + 1, 'idRadio': args.idRadio, 'start': args.start.value, 'text': modal.result, idRadio: 1 }
+            let jsonvariable = {};
+            jsonvariable[name] = event4FB
+            console.log("jsonvariable", jsonvariable, args)
+            refEventDay.update(jsonvariable)
+   
+          });*/
       },
 
 
@@ -139,8 +191,6 @@ class Calendar extends Component {
         }
 
         var form = [
-
-          { name: "Text", id: "text" },
           {
             name: "Resource", id: "resource", options:
               resources
@@ -148,8 +198,6 @@ class Calendar extends Component {
         ];
         //ICIlA
         var data = {
-          text: args.e.data.text,
-
           resource: args.e.data.idRadio
         };
 
@@ -174,7 +222,15 @@ class Calendar extends Component {
 
           var e = that.calendar.events.find(args.e.data.id);
           console.log('la', e)
-          e.text(args2.result.text); // update the event text
+          let pos = 0
+          for (let item of that.state.items) {
+            if (item.station.id == args2.result.resource) {
+              break;
+            } else {
+              pos++;
+            }
+          }
+          e.text(that.state.items[pos].station.name); // update the event text
           e.data.idRadio = args2.result.resource
           //e.idRadio(args2.result.resource)
           that.calendar.events.update(e).queue();
@@ -196,7 +252,8 @@ class Calendar extends Component {
                 if (eventFB.val().id == args.e.data.id) {
                   console.log('refupdater', eventFB.ref, eventFB, 'datafrom', e.data);
 
-                  let event4FB = { 'end': e.data.end, 'id': e.data.id, 'idRadio': e.data.idRadio, 'start': e.data.start, 'text': e.data.text }
+                  console.log("THAt", that.state.items[pos], that.state.items, pos, e, e.data)
+                  let event4FB = { 'end': e.data.end, 'id': e.data.id, 'idRadio': e.data.idRadio, 'start': e.data.start, 'text': that.state.items[pos].station.name }
 
                   //WTF NOT WORKING ???? NOW THAT WE CHANGE THING
                   eventFB.ref.update(event4FB)
